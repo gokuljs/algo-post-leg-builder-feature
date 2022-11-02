@@ -3,18 +3,14 @@ import React, { useEffect, useState } from "react";
 import { CustomInputContainer } from "./styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { NumberInputProps } from "./types";
 
 function NumberInput({
   name,
   fieldName,
   register,
   setValue,
-}: {
-  name: string;
-  fieldName: string;
-  register?: any;
-  setValue: any;
-}) {
+}: NumberInputProps) {
   const [customValue, setCustomValue] = useState<number>(1);
   useEffect(() => {
     if (customValue <= 1) {
@@ -23,7 +19,8 @@ function NumberInput({
   }, [customValue]);
   return (
     <CustomInputContainer>
-      <p className="label">{name}</p>
+      {name && <p className="label">{name}</p>}
+
       <Grid className="input-container">
         <input
           type="number"

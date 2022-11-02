@@ -5,7 +5,7 @@ export const CustomSelectContainer = styled(Grid)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 1rem;
+  margin: 1rem 1rem;
   .label {
     padding: 0;
     margin: 0;

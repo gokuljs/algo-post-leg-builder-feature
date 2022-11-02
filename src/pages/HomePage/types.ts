@@ -18,3 +18,9 @@ export type InputListProps = {
   type: "DROPDOWN" | "NUMBER_INPUT";
   children?: any[];
 };
+
+export enum StrikeCriteria {
+  STRIKE_TYPE = "Strike Type",
+  PREMIUM_RANGE = "Premium Range",
+  STRADDLE_WIDTH = "Straddle Width",
+}

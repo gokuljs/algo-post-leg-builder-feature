@@ -10,8 +10,9 @@ import {
   MainContainer,
   OptionsContainer,
   SegmentContainer,
+  StraddleWidthOptions,
 } from "./styles";
-import { SEGMENTS } from "./types";
+import { SEGMENTS, StrikeCriteria } from "./types";
 import { inputList, leftButtonBorder, rightButtonBorder } from "./utils";
 import { useForm } from "react-hook-form";
 
@@ -21,6 +22,61 @@ function HomePage() {
   const onSubmit = (data: any) => console.log(data);
   const selectedStrikeCriteria = watch("strikeCriteria");
   console.log(typeof selectedStrikeCriteria, "ssss");
+
+  const handleStrikeCriteria = () => {
+    switch (true) {
+      case selectedStrikeCriteria === StrikeCriteria.STRADDLE_WIDTH:
+        return (
+          <StraddleWidthOptions
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            [ATM Strike{" "}
+            <CustomDropDown
+              name=""
+              fieldName="atmStrike"
+              lists={["+", "-"]}
+              register={register}
+            />{" "}
+            (
+            <NumberInput
+              name=""
+              fieldName="strikeAdjustMent"
+              register={register}
+              setValue={setValue}
+            />{" "}
+            &times; ATM Straddle Price ) ]
+          </StraddleWidthOptions>
+        );
+      case selectedStrikeCriteria === StrikeCriteria.PREMIUM_RANGE:
+        return (
+          <Grid display="flex">
+            <NumberInput
+              name="Lower Range"
+              fieldName="lowerRange"
+              register={register}
+              setValue={setValue}
+            />
+            <NumberInput
+              name="Upper Range"
+              fieldName="upperRange"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
+        );
+      default:
+        return (
+          <CustomDropDown
+            name="Strike Type"
+            fieldName="strikeType"
+            lists={["ATM", "OTM1"]}
+            register={register}
+          />
+        );
+    }
+  };
   return (
     <HomePageWrapper display="flex" justifyContent="center" alignItems="center">
       <MainContainer
@@ -81,8 +137,12 @@ function HomePage() {
                   </>
                 ))
               )}
+            {handleStrikeCriteria()}
+            <Grid className="submit-container" container lg={12}>
+              <input className="submit" type="submit" />
+              <input className="cancel" type="button" value="cancel" />
+            </Grid>
           </FormContainer>
-          <input type="submit" />
         </OptionsContainer>
       </MainContainer>
     </HomePageWrapper>

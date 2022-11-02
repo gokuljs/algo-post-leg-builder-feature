@@ -37,11 +37,6 @@ export const inputList: InputListProps[] = [
     name: "Select Strike Criteria",
     type: "DROPDOWN",
     filedName: "strikeCriteria",
-    children: [
-      "Strike Type",
-      "Premium Range",
-      "Closest Premium",
-      "Straddle Width",
-    ],
+    children: ["Strike Type", "Premium Range", "Straddle Width"],
   },
 ];

@@ -4,7 +4,7 @@ export const CustomInputContainer = styled(Grid)`
   width: fit-content;
   height: fit-content;
   display: flex;
-  margin: 0 1rem;
+  margin: 1rem 1rem;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
