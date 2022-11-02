@@ -4,31 +4,47 @@ import { CustomInputContainer } from "./styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-function NumberInput() {
-  const [value, setValue] = useState<number>(1);
+function NumberInput({
+  name,
+  fieldName,
+  register,
+  setValue,
+}: {
+  name: string;
+  fieldName: string;
+  register?: any;
+  setValue: any;
+}) {
+  const [customValue, setCustomValue] = useState<number>(1);
   useEffect(() => {
-    if (value <= 1) {
-      setValue(1);
+    if (customValue <= 1) {
+      setCustomValue(1);
     }
-  }, [value]);
+  }, [customValue]);
   return (
     <CustomInputContainer>
-      <p className="label">name</p>
+      <p className="label">{name}</p>
       <Grid className="input-container">
         <input
-          type="Number"
-          value={value}
-          min="1"
+          type="number"
+          defaultValue={1}
+          {...register(fieldName)}
           className="custom-inputField"
         />
         <Grid className="arrow-container">
           <KeyboardArrowUpIcon
             className="upArrow"
-            onClick={() => setValue(value + 1)}
+            onClick={() => {
+              setCustomValue(customValue + 1);
+              setValue(fieldName, customValue);
+            }}
           />
           <KeyboardArrowDownIcon
             className="downArrow"
-            onClick={() => setValue(value - 1)}
+            onClick={() => {
+              setCustomValue(customValue - 1);
+              setValue(fieldName, customValue);
+            }}
           />
         </Grid>
       </Grid>

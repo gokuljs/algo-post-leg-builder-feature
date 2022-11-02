@@ -33,4 +33,15 @@ export const inputList: InputListProps[] = [
     filedName: "expiry",
     children: ["Weekly", "Monthly"],
   },
+  {
+    name: "Select Strike Criteria",
+    type: "DROPDOWN",
+    filedName: "strikeCriteria",
+    children: [
+      "Strike Type",
+      "Premium Range",
+      "Closest Premium",
+      "Straddle Width",
+    ],
+  },
 ];

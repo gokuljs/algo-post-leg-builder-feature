@@ -58,3 +58,11 @@ export const OptionsContainer = styled(Grid)`
     min-width: 10px;
   }
 `;
+
+export const FormContainer = styled("form")`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin: 1rem;
+  align-items: center;
+`;
