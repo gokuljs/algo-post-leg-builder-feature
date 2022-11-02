@@ -71,28 +71,30 @@ export const FormContainer = styled("form")`
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
+    .btn {
+      text-transform: uppercase;
+      font-family: sans-serif;
+      padding: 0.5rem 1.2rem;
+    }
     .submit {
       padding: 0.5rem 1.2rem;
       color: #ecf2fc;
-      text-transform: uppercase;
-      font-family: sans-serif;
       background-color: #0b5cd7;
       border: 1px solid #0b5cd733;
       transition: all 0.2s ease-in-out;
       margin: 0 1rem;
+      border-radius: 24px;
       :hover {
         color: #0b5cd7;
         background-color: #ecf2fc;
       }
     }
     .cancel {
-      padding: 0.5rem 1.2rem;
-      text-transform: uppercase;
-      font-family: sans-serif;
       border: 1px solid #101828;
       background-color: #1d2939;
       transition: all 0.2s ease-in-out;
       color: #ffffff;
+      border-radius: 24px;
       :hover {
         color: #101828;
         background-color: #f9fafb;

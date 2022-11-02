@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import NumberInput from "../../components/customInputs/NumberInput";
 import CustomDropDown from "../../components/DropDown/CustomDropdown/Index";
 import {
@@ -15,13 +15,16 @@ import {
 import { SEGMENTS, StrikeCriteria } from "./types";
 import { inputList, leftButtonBorder, rightButtonBorder } from "./utils";
 import { useForm } from "react-hook-form";
+import uuid from "react-uuid";
 
-function HomePage() {
+function HomePage({ setJsonData }: { setJsonData: any }) {
   const [segments, setSegments] = useState<SEGMENTS>("OPTIONS");
   const { register, handleSubmit, watch, setValue } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    data = { ...data, id: uuid(), Lots: String(data?.Lots) };
+    setJsonData((arr: []) => [...arr, data]);
+  };
   const selectedStrikeCriteria = watch("strikeCriteria");
-  console.log(typeof selectedStrikeCriteria, "ssss");
 
   const handleStrikeCriteria = () => {
     switch (true) {
@@ -138,9 +141,9 @@ function HomePage() {
                 ))
               )}
             {handleStrikeCriteria()}
-            <Grid className="submit-container" container lg={12}>
-              <input className="submit" type="submit" />
-              <input className="cancel" type="button" value="cancel" />
+            <Grid className="submit-container" container item lg={12}>
+              <input className="submit btn" type="submit" />
+              <input className="cancel btn" type="button" value="cancel" />
             </Grid>
           </FormContainer>
         </OptionsContainer>

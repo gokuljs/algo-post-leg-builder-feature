@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material";
 import HomePage from "./pages/HomePage";
 
@@ -8,9 +8,11 @@ const MainContainer = styled("div")`
 `;
 
 function App() {
+  const [jsonData, setJsonData] = useState([]);
+  console.log(jsonData, "ssss");
   return (
     <MainContainer>
-      <HomePage />
+      <HomePage setJsonData={setJsonData} />
     </MainContainer>
   );
 }
