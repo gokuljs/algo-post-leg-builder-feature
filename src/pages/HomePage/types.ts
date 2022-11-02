@@ -11,3 +11,10 @@ export type CustomButtonProps = {
   borderDesign: any;
   selected: boolean;
 };
+
+export type InputListProps = {
+  name: string;
+  filedName: string;
+  type: "DROPDOWN" | "NUMBER_INPUT";
+  children?: any[];
+};

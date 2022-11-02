@@ -4,7 +4,7 @@ import { CustomButtonProps } from "./types";
 export const HomePageWrapper = styled(Grid)`
   width: 100%;
   min-height: 40vh;
-  padding: 3rem 2rem;
+  padding: 3rem 1rem;
 `;
 
 export const Container = styled(Grid)(() => ({
@@ -44,4 +44,17 @@ export const CustomButton = styled("button")(
   })
 );
 
-export const OptionsContainer = styled(Grid)``;
+export const OptionsContainer = styled(Grid)`
+  .select-tag {
+    border: none;
+    min-width: 6rem;
+    outline: none;
+    padding: 0.25rem 0.5rem;
+  }
+  .label-tag {
+    margin-right: 0.3rem;
+  }
+  input[type="number"] {
+    min-width: 10px;
+  }
+`;
