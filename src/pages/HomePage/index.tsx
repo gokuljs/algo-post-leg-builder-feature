@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Grid } from "@mui/material";
-import React, { useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import NumberInput from "../../components/customInputs/NumberInput";
 import CustomDropDown from "../../components/DropDown/CustomDropdown/Index";
 import {
@@ -7,6 +8,7 @@ import {
   CustomButton,
   FormContainer,
   HomePageWrapper,
+  IconsContainer,
   MainContainer,
   OptionsContainer,
   SegmentContainer,
@@ -16,19 +18,67 @@ import { SEGMENTS, StrikeCriteria } from "./types";
 import { inputList, leftButtonBorder, rightButtonBorder } from "./utils";
 import { useForm } from "react-hook-form";
 import uuid from "react-uuid";
+import CancelIcon from "@mui/icons-material/Cancel";
+import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
 
-function HomePage({ setJsonData }: { setJsonData: any }) {
+function HomePage({
+  setJsonData,
+  jsonData,
+  currentValue,
+}: {
+  setJsonData: any;
+  jsonData: any;
+  currentValue?: any;
+}) {
   const [segments, setSegments] = useState<SEGMENTS>("OPTIONS");
-  const { register, handleSubmit, watch, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  const [currentIndexValue, setCurrentIndexValue] = useState(
+    currentValue ? currentValue : null
+  );
+  const [currentDropDownValue, setCurrentDropDownValue] = useState(
+    currentIndexValue && currentIndexValue?.strikeCriteria
+      ? currentIndexValue?.strikeCriteria
+      : "Strike Type"
+  );
+
+  useEffect(() => {
+    if (currentIndexValue) {
+      const tempArr = [...jsonData];
+      const index = tempArr.findIndex(
+        (item: any) => item.id === currentIndexValue?.id
+      );
+      tempArr.splice(index, 1, currentIndexValue);
+      console.log({ tempArr }, "ssss");
+      setJsonData([...tempArr]);
+    }
+  }, [currentIndexValue]);
+
   const onSubmit = (data: any) => {
     data = { ...data, id: uuid(), Lots: String(data?.Lots) };
-    setJsonData((arr: []) => [...arr, data]);
+    setJsonData((arr: any) => [...arr, data]);
   };
-  const selectedStrikeCriteria = watch("strikeCriteria");
+
+  const deletion = () => {
+    if (currentIndexValue) {
+      const tempArr = [...jsonData];
+      const index = tempArr.findIndex(
+        (item: any) => item.id === currentIndexValue?.id
+      );
+      tempArr.splice(index, 1);
+      setJsonData([...tempArr]);
+    }
+  };
+
+  const currentIndexValueDuplication = () => {
+    if (currentIndexValue) {
+      const duplicateValue = { ...currentIndexValue, id: uuid() };
+      setJsonData((arr: any) => [...arr, duplicateValue]);
+    }
+  };
 
   const handleStrikeCriteria = () => {
     switch (true) {
-      case selectedStrikeCriteria === StrikeCriteria.STRADDLE_WIDTH:
+      case currentDropDownValue === StrikeCriteria.STRADDLE_WIDTH:
         return (
           <StraddleWidthOptions
             display="flex"
@@ -37,13 +87,18 @@ function HomePage({ setJsonData }: { setJsonData: any }) {
           >
             [ATM Strike{" "}
             <CustomDropDown
+              currentIndexValue={currentIndexValue}
               name=""
+              setCurrentDropDownValue={setCurrentDropDownValue}
               fieldName="atmStrike"
               lists={["+", "-"]}
               register={register}
+              setCurrentIndexValue={setCurrentIndexValue}
             />{" "}
             (
             <NumberInput
+              setCurrentIndexValue={setCurrentIndexValue}
+              currentIndexValue={currentIndexValue}
               name=""
               fieldName="strikeAdjustMent"
               register={register}
@@ -52,16 +107,20 @@ function HomePage({ setJsonData }: { setJsonData: any }) {
             &times; ATM Straddle Price ) ]
           </StraddleWidthOptions>
         );
-      case selectedStrikeCriteria === StrikeCriteria.PREMIUM_RANGE:
+      case currentDropDownValue === StrikeCriteria.PREMIUM_RANGE:
         return (
           <Grid display="flex">
             <NumberInput
+              setCurrentIndexValue={setCurrentIndexValue}
+              currentIndexValue={currentIndexValue}
               name="Lower Range"
               fieldName="lowerRange"
               register={register}
               setValue={setValue}
             />
             <NumberInput
+              setCurrentIndexValue={setCurrentIndexValue}
+              currentIndexValue={currentIndexValue}
               name="Upper Range"
               fieldName="upperRange"
               register={register}
@@ -69,85 +128,116 @@ function HomePage({ setJsonData }: { setJsonData: any }) {
             />
           </Grid>
         );
-      default:
+      case currentDropDownValue === StrikeCriteria.STRIKE_TYPE:
         return (
           <CustomDropDown
+            currentIndexValue={currentIndexValue}
+            setCurrentIndexValue={setCurrentIndexValue}
+            setCurrentDropDownValue={setCurrentDropDownValue}
             name="Strike Type"
             fieldName="strikeType"
             lists={["ATM", "OTM1"]}
             register={register}
           />
         );
+      default:
+        return <></>;
     }
   };
   return (
     <HomePageWrapper display="flex" justifyContent="center" alignItems="center">
-      <MainContainer
-        className="mainContainer"
-        justifyContent="center"
-        alignItems="center"
-        item
-        lg={12}
-      >
-        <SegmentContainer>
-          <p className="segments-text">Select Segments</p>
-          <Grid className="button-container">
-            <CustomButton
-              borderDesign={leftButtonBorder}
-              onClick={() => setSegments("FUTURES")}
-              selected={segments === "FUTURES"}
-            >
-              Futures
-            </CustomButton>
-            <CustomButton
-              borderDesign={rightButtonBorder}
-              onClick={() => setSegments("OPTIONS")}
-              selected={segments === "OPTIONS"}
-            >
-              Options
-            </CustomButton>
-          </Grid>
-        </SegmentContainer>
-        <OptionsContainer container item display="flex" lg={12}>
-          <FormContainer onSubmit={handleSubmit(onSubmit)}>
-            {Array.isArray(inputList) &&
-              inputList.length > 0 &&
-              React.Children.toArray(
-                inputList.map((value) => (
-                  <>
-                    {(() => {
-                      switch (true) {
-                        case value?.type === "DROPDOWN":
-                          return (
-                            <CustomDropDown
-                              name={value.name}
-                              fieldName={value.filedName}
-                              lists={value.children}
-                              register={register}
-                            />
-                          );
-                        default:
-                          return (
-                            <NumberInput
-                              name={value.name}
-                              fieldName={value.filedName}
-                              register={register}
-                              setValue={setValue}
-                            />
-                          );
-                      }
-                    })()}
-                  </>
-                ))
+      <Container showContainer={!!currentIndexValue}>
+        <MainContainer
+          className="mainContainer"
+          justifyContent="center"
+          alignItems="center"
+          item
+          lg={12}
+        >
+          {currentIndexValue && (
+            <IconsContainer>
+              <CancelIcon className="close-icon" onClick={() => deletion()} />
+              <span className="clipboard-copy-container">
+                <ContentCopyTwoToneIcon
+                  className="clipboard"
+                  onClick={() => currentIndexValueDuplication()}
+                />
+              </span>
+            </IconsContainer>
+          )}
+
+          {!currentIndexValue && (
+            <SegmentContainer>
+              <p className="segments-text">Select Segments</p>
+              <Grid className="button-container">
+                <CustomButton
+                  borderDesign={leftButtonBorder}
+                  onClick={() => setSegments("FUTURES")}
+                  selected={segments === "FUTURES"}
+                >
+                  Futures
+                </CustomButton>
+                <CustomButton
+                  borderDesign={rightButtonBorder}
+                  onClick={() => setSegments("OPTIONS")}
+                  selected={segments === "OPTIONS"}
+                >
+                  Options
+                </CustomButton>
+              </Grid>
+            </SegmentContainer>
+          )}
+
+          <OptionsContainer container item display="flex" lg={12}>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+              {Array.isArray(inputList) &&
+                inputList.length > 0 &&
+                React.Children.toArray(
+                  inputList.map((value) => (
+                    <>
+                      {(() => {
+                        switch (true) {
+                          case value?.type === "DROPDOWN":
+                            return (
+                              <CustomDropDown
+                                setCurrentIndexValue={setCurrentIndexValue}
+                                currentIndexValue={currentIndexValue}
+                                setCurrentDropDownValue={
+                                  setCurrentDropDownValue
+                                }
+                                name={value.name}
+                                fieldName={value.filedName}
+                                lists={value.children}
+                                register={register}
+                              />
+                            );
+                          default:
+                            return (
+                              <NumberInput
+                                setCurrentIndexValue={setCurrentIndexValue}
+                                currentIndexValue={currentIndexValue}
+                                name={value.name}
+                                fieldName={value.filedName}
+                                register={register}
+                                setValue={setValue}
+                              />
+                            );
+                        }
+                      })()}
+                    </>
+                  ))
+                )}
+              {handleStrikeCriteria()}
+              {!currentIndexValue && (
+                <Grid className="submit-container" container item lg={12}>
+                  <input className="submit btn" type="submit" value="Add Leg" />
+                  <input className="cancel btn" type="button" value="cancel" />
+                </Grid>
               )}
-            {handleStrikeCriteria()}
-            <Grid className="submit-container" container item lg={12}>
-              <input className="submit btn" type="submit" />
-              <input className="cancel btn" type="button" value="cancel" />
-            </Grid>
-          </FormContainer>
-        </OptionsContainer>
-      </MainContainer>
+            </FormContainer>
+          </OptionsContainer>
+        </MainContainer>
+      </Container>
     </HomePageWrapper>
   );
 }

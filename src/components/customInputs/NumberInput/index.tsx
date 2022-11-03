@@ -10,13 +10,11 @@ function NumberInput({
   fieldName,
   register,
   setValue,
+  currentIndexValue,
+  setCurrentIndexValue,
 }: NumberInputProps) {
   const [customValue, setCustomValue] = useState<number>(1);
-  useEffect(() => {
-    if (customValue <= 1) {
-      setCustomValue(1);
-    }
-  }, [customValue]);
+
   return (
     <CustomInputContainer>
       {name && <p className="label">{name}</p>}
@@ -24,7 +22,11 @@ function NumberInput({
       <Grid className="input-container">
         <input
           type="number"
-          defaultValue={1}
+          defaultValue={
+            currentIndexValue && currentIndexValue[fieldName]
+              ? currentIndexValue[fieldName]
+              : 1
+          }
           {...register(fieldName)}
           className="custom-inputField"
         />
@@ -34,13 +36,25 @@ function NumberInput({
             onClick={() => {
               setCustomValue(customValue + 1);
               setValue(fieldName, customValue);
+              if (currentIndexValue) {
+                setCurrentIndexValue({
+                  ...currentIndexValue,
+                  [fieldName]: customValue,
+                });
+              }
             }}
           />
           <KeyboardArrowDownIcon
             className="downArrow"
             onClick={() => {
-              setCustomValue(customValue - 1);
+              setCustomValue(customValue <= 1 ? 1 : customValue - 1);
               setValue(fieldName, customValue);
+              if (currentIndexValue) {
+                setCurrentIndexValue({
+                  ...currentIndexValue,
+                  [fieldName]: customValue,
+                });
+              }
             }}
           />
         </Grid>

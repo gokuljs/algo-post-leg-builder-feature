@@ -7,20 +7,52 @@ export const HomePageWrapper = styled(Grid)`
   padding: 3rem 1rem;
 `;
 
-export const Container = styled(Grid)(() => ({
-  width: "90%",
-  minHeight: "40vh",
-  padding: "2rem",
-  background: "#d8c6bb47",
-  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+export const Container = styled(Grid)(
+  ({ showContainer }: { showContainer: boolean }) => ({
+    minWidth: "90%",
+    minHeight: "40vh",
+    padding: "2rem",
+    background: showContainer ? "#d8c6bb47" : "transparent",
+    boxShadow: showContainer
+      ? "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+      : "none",
+    display: "flex",
+    justifyContent: "center",
+    alginItems: "center",
+  })
+);
+
+export const IconsContainer = styled(Grid)(() => ({
+  position: "absolute",
+  top: "-3%",
+  left: "99%",
+  ".close-icon": {
+    color: "red",
+    marginBottom: "0.5rem",
+  },
+  ".clipboard-copy-container": {
+    background: "#fff",
+    padding: "1rem",
+    display: "flex",
+    borderRadius: "24px",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "22px",
+    height: "22px",
+  },
+  ".clipboard": {
+    fontSize: "1rem",
+    color: "#344054",
+  },
 }));
 
 export const MainContainer = styled(Grid)(() => ({
-  width: "90%",
+  width: "100%",
   minHeight: "40vh",
   padding: "2rem",
   backgroundColor: "#F4EBE7",
   boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+  position: "relative",
 }));
 
 export const SegmentContainer = styled(Grid)`

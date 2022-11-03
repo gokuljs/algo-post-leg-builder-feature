@@ -3,12 +3,42 @@ import React from "react";
 import { CustomSelect, CustomSelectContainer } from "./styles";
 import { DropDownProps } from "./types";
 
-function CustomDropDown({ name, fieldName, lists, register }: DropDownProps) {
+function CustomDropDown({
+  name,
+  fieldName,
+  lists,
+  register,
+  currentIndexValue,
+  setCurrentIndexValue,
+  setCurrentDropDownValue,
+}: DropDownProps) {
+  const handleDropDownChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (fieldName === "strikeCriteria" && e.target.value) {
+      setCurrentDropDownValue(e.target.value);
+    }
+    if (currentIndexValue) {
+      setCurrentIndexValue({
+        ...currentIndexValue,
+        [fieldName]: e.target.value,
+      });
+    }
+  };
+  console.log({ currentIndexValue }, "ssss");
   return (
     <CustomSelectContainer>
       {name && <p className="label">{name}</p>}
       <Grid>
-        <CustomSelect {...register(fieldName)}>
+        <CustomSelect
+          defaultValue={
+            currentIndexValue && currentIndexValue[fieldName]
+              ? currentIndexValue[fieldName]
+              : ""
+          }
+          {...register(fieldName)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleDropDownChange(e);
+          }}
+        >
           {lists &&
             Array.isArray(lists) &&
             lists.length > 0 &&

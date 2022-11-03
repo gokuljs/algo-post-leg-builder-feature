@@ -12,7 +12,18 @@ function App() {
   console.log(jsonData, "ssss");
   return (
     <MainContainer>
-      <HomePage setJsonData={setJsonData} />
+      <HomePage setJsonData={setJsonData} jsonData={jsonData} />
+      {Array.isArray(jsonData) &&
+        jsonData.length > 0 &&
+        React.Children.toArray(
+          jsonData.map((value) => (
+            <HomePage
+              setJsonData={setJsonData}
+              jsonData={jsonData}
+              currentValue={value}
+            />
+          ))
+        )}
     </MainContainer>
   );
 }
