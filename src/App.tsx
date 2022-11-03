@@ -44,11 +44,13 @@ const NavBarContainer = styled(Grid)`
 `;
 function App() {
   const [jsonData, setJsonData] = useState([]);
-  console.log(jsonData, "ssss");
+  const fireBaseDeploy = () => {
+    const JsonObject = JSON.parse(JSON.stringify(jsonData));
+  };
   return (
     <MainContainer>
       <NavBarContainer container lg={12} item>
-        <button className="deploy">
+        <button className="deploy" onClick={() => fireBaseDeploy()}>
           <img src={fireBase} className="fireBase-Image" alt="firebAse-logo" />
           deploy to firebase
         </button>

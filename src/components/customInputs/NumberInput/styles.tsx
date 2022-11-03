@@ -33,6 +33,9 @@ export const CustomInputContainer = styled(Grid)`
     border: none;
     outline: none;
     background: transparent;
+    :disabled {
+      cursor: not-allowed;
+    }
   }
   .arrow-container {
     display: flex;

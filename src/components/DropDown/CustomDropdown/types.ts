@@ -7,4 +7,5 @@ export type DropDownProps = {
   setCurrentDropDownValue: Dispatch<string>;
   currentIndexValue: any;
   setCurrentIndexValue: Dispatch<any>;
+  disabled?: boolean;
 };

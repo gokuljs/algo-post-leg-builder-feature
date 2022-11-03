@@ -15,15 +15,24 @@ export const CustomSelectContainer = styled(Grid)`
   }
 `;
 
-export const CustomSelect = styled("select")`
+export type CustomSelectProps = {
+  hasDefaultValue: boolean;
+};
+
+export const CustomSelect = styled("select")<CustomSelectProps>`
   border: none;
   outline: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  background: ${(props) => (props.hasDefaultValue ? "blue" : "white")};
+  color: ${(props) => (props.hasDefaultValue ? "white" : "black")};
   border-radius: 24px;
   min-width: 4rem;
   padding: 0 0.5rem;
   height: 32px;
+  cursor: pointer;
+  :disabled {
+    cursor: not-allowed;
+  }
 `;

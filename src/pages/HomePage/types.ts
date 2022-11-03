@@ -19,6 +19,11 @@ export type InputListProps = {
   children?: any[];
 };
 
+export type CheckedProps = {
+  simpleMovement: boolean;
+  trailSl: boolean;
+};
+
 export enum StrikeCriteria {
   STRIKE_TYPE = "Strike Type",
   PREMIUM_RANGE = "Premium Range",

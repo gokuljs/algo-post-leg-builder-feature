@@ -7,4 +7,5 @@ export type NumberInputProps = {
   setValue: any;
   currentIndexValue: any;
   setCurrentIndexValue: Dispatch<any>;
+  disabled?: boolean;
 };

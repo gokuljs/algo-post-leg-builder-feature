@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import NumberInput from "../../components/customInputs/NumberInput";
 import CustomDropDown from "../../components/DropDown/CustomDropdown/Index";
 import {
+  CheckBoxContainer,
   Container,
   CustomButton,
   FormContainer,
@@ -14,12 +15,14 @@ import {
   SegmentContainer,
   StraddleWidthOptions,
 } from "./styles";
-import { SEGMENTS, StrikeCriteria } from "./types";
+import { CheckedProps, SEGMENTS, StrikeCriteria } from "./types";
 import { inputList, leftButtonBorder, rightButtonBorder } from "./utils";
 import { useForm } from "react-hook-form";
 import uuid from "react-uuid";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 function HomePage({
   setJsonData,
@@ -32,6 +35,10 @@ function HomePage({
 }) {
   const [segments, setSegments] = useState<SEGMENTS>("OPTIONS");
   const { register, handleSubmit, setValue } = useForm();
+  const [checked, setChecked] = useState<CheckedProps>({
+    simpleMovement: true,
+    trailSl: true,
+  });
   const [currentIndexValue, setCurrentIndexValue] = useState(
     currentValue ? currentValue : null
   );
@@ -48,10 +55,34 @@ function HomePage({
         (item: any) => item.id === currentIndexValue?.id
       );
       tempArr.splice(index, 1, currentIndexValue);
-      console.log({ tempArr }, "ssss");
       setJsonData([...tempArr]);
     }
   }, [currentIndexValue]);
+
+  useEffect(() => {
+    if (checked.simpleMovement && currentIndexValue) {
+      const tempArr = { ...currentIndexValue };
+      const keys = Object.keys(currentIndexValue);
+      const deleteValue = ["simpleMomentumType", "simpleMomentumValue"];
+      deleteValue.forEach((value) => {
+        if (keys.includes(value)) {
+          delete tempArr[value];
+        }
+      });
+      setCurrentIndexValue(tempArr);
+    }
+    if (checked.trailSl && currentIndexValue) {
+      const tempArr = { ...currentIndexValue };
+      const keys = Object.keys(currentIndexValue);
+      const deleteValue = ["instrumentMove", "stopLossMove", "trailSlType"];
+      deleteValue.forEach((value) => {
+        if (keys.includes(value)) {
+          delete tempArr[value];
+        }
+      });
+      setCurrentIndexValue(tempArr);
+    }
+  }, [checked]);
 
   const onSubmit = (data: any) => {
     data = { ...data, id: uuid(), Lots: String(data?.Lots) };
@@ -236,6 +267,100 @@ function HomePage({
               )}
             </FormContainer>
           </OptionsContainer>
+          {currentIndexValue && (
+            <CheckBoxContainer container lg={12}>
+              <Grid className="checkBox-container">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onClick={() => {
+                        setChecked({
+                          ...checked,
+                          simpleMovement: !checked.simpleMovement,
+                        });
+                      }}
+                    />
+                  }
+                  label="Simple Momentum"
+                />
+                <Grid display="flex" justify-content="center">
+                  <CustomDropDown
+                    currentIndexValue={currentIndexValue}
+                    name=""
+                    disabled={checked.simpleMovement}
+                    setCurrentDropDownValue={setCurrentDropDownValue}
+                    fieldName="simpleMomentumType"
+                    lists={[
+                      "points ↑",
+                      "Points ↓",
+                      "Percentage ↑",
+                      "Percentage ↓",
+                      "Underlying Points ↑",
+                      "Underlying Points ↓",
+                      "Underlying Percentage ↑",
+                      "Underlying Percentage ↓",
+                    ]}
+                    register={register}
+                    setCurrentIndexValue={setCurrentIndexValue}
+                  />
+                  <NumberInput
+                    setCurrentIndexValue={setCurrentIndexValue}
+                    currentIndexValue={currentIndexValue}
+                    disabled={checked.simpleMovement}
+                    name=""
+                    fieldName="simpleMomentumValue"
+                    register={register}
+                    setValue={setValue}
+                  />
+                </Grid>
+              </Grid>
+              <Grid className="checkBox-container">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onClick={() => {
+                        setChecked({
+                          ...checked,
+                          trailSl: !checked.trailSl,
+                        });
+                      }}
+                    />
+                  }
+                  label="Trail sl"
+                />
+                <Grid display="flex" justify-content="center">
+                  <CustomDropDown
+                    currentIndexValue={currentIndexValue}
+                    disabled={checked.trailSl}
+                    name=""
+                    setCurrentDropDownValue={setCurrentDropDownValue}
+                    fieldName="trailSlType"
+                    lists={["points ", "Percentage "]}
+                    register={register}
+                    setCurrentIndexValue={setCurrentIndexValue}
+                  />
+                  <NumberInput
+                    setCurrentIndexValue={setCurrentIndexValue}
+                    currentIndexValue={currentIndexValue}
+                    name=""
+                    disabled={checked.trailSl}
+                    fieldName="instrumentMove"
+                    register={register}
+                    setValue={setValue}
+                  />
+                  <NumberInput
+                    setCurrentIndexValue={setCurrentIndexValue}
+                    currentIndexValue={currentIndexValue}
+                    name=""
+                    disabled={checked.trailSl}
+                    fieldName="stopLossMove"
+                    register={register}
+                    setValue={setValue}
+                  />
+                </Grid>
+              </Grid>
+            </CheckBoxContainer>
+          )}
         </MainContainer>
       </Container>
     </HomePageWrapper>

@@ -11,6 +11,7 @@ function CustomDropDown({
   currentIndexValue,
   setCurrentIndexValue,
   setCurrentDropDownValue,
+  disabled = false,
 }: DropDownProps) {
   const handleDropDownChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (fieldName === "strikeCriteria" && e.target.value) {
@@ -23,12 +24,14 @@ function CustomDropDown({
       });
     }
   };
-  console.log({ currentIndexValue }, "ssss");
+
   return (
     <CustomSelectContainer>
       {name && <p className="label">{name}</p>}
       <Grid>
         <CustomSelect
+          hasDefaultValue={!!currentIndexValue}
+          disabled={disabled}
           defaultValue={
             currentIndexValue && currentIndexValue[fieldName]
               ? currentIndexValue[fieldName]
