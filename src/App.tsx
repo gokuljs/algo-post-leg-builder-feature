@@ -8,6 +8,7 @@ import { MainContainer, NavBarContainer } from "./styles";
 import { AlgoPostDataProps } from "./types";
 import Dialog from "@mui/material/Dialog";
 import DisplayFireBaseData from "./pages/HomePage/components/showFireBaseData";
+import StorageIcon from "@mui/icons-material/Storage";
 
 function App() {
   const [jsonData, setJsonData] = useState<AlgoPostDataProps[] | []>([]);
@@ -43,6 +44,7 @@ function App() {
       <NavBarContainer container lg={12} item>
         {Array.isArray(fetchData) && fetchData.length > 0 && (
           <button className="deploy" onClick={() => setShowDataSet(true)}>
+            <StorageIcon className="storage" />
             Dataset
           </button>
         )}

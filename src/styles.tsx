@@ -38,6 +38,10 @@ export const NavBarContainer = styled(Grid)`
       background: transparent;
       color: rgba(88, 43, 255, 1);
     }
+    .storage {
+      font-size: 1rem;
+      margin-right: 0.25rem;
+    }
 
     .progressBar-container {
       display: flex;
