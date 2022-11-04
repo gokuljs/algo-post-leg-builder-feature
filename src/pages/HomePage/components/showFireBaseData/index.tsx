@@ -16,7 +16,12 @@ function DisplayFireBaseData({
       <Grid container item lg={12} display="flex" justifyContent={"flex-end"}>
         <CloseIcon className="close" onClick={() => setShowDataSet(false)} />
       </Grid>
-      <Grid display="flex" className="table-container">
+      <Grid
+        display="flex"
+        className="table-container"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid
           lg={12}
           display="flex"
