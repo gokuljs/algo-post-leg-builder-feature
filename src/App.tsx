@@ -1,60 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { styled, Grid } from "@mui/material";
 import HomePage from "./pages/HomePage";
-import fireBase from "./assests/svg/firebase.svg";
+import fireBase from "./assets/svg/firebase.svg";
 import { db } from "./firebase-config";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import CircularProgress from "@mui/material/CircularProgress";
-
-const MainContainer = styled("div")`
-  width: 100%;
-  min-height: 100vh;
-`;
-
-const NavBarContainer = styled(Grid)`
-  min-height: 50px;
-  padding: 1rem 5rem;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  .deploy {
-    padding: 0.7rem 1rem;
-    text-transform: capitalize;
-    font-family: "Roboto", sans-serif;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(
-      90deg,
-      rgba(88, 43, 255, 1) 24%,
-      rgba(156, 17, 255, 1) 75%,
-      rgba(219, 13, 245, 1) 100%
-    );
-
-    color: #fff;
-    border: 1px solid #db46fc;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    transition: all 0.3s ease-in-out;
-    :hover {
-      background: transparent;
-      color: rgba(88, 43, 255, 1);
-    }
-    .progressBar-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: 0.5rem;
-    }
-  }
-  .fireBase-Image {
-    height: 1.5rem;
-  }
-`;
+import { MainContainer, NavBarContainer } from "./styles";
+import { AlgoPostDataProps } from "./types";
+import Dialog from "@mui/material/Dialog";
+import DisplayFireBaseData from "./pages/HomePage/components/showFireBaseData";
 
 function App() {
-  const [jsonData, setJsonData] = useState([]);
-  const [fetchData, setFetchData] = useState<any[]>([]);
+  const [jsonData, setJsonData] = useState<AlgoPostDataProps[] | []>([]);
+  const [fetchData, setFetchData] = useState<AlgoPostDataProps[] | []>([]);
+  const [showDataSet, setShowDataSet] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
   const userCollectionRef = collection(db, "algoPost");
   const fireBaseDeploy = async () => {
@@ -78,13 +36,17 @@ function App() {
     };
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(fetchData, "ssss");
+  }, [isLoading]);
 
   return (
     <MainContainer>
       <NavBarContainer container lg={12} item>
+        {Array.isArray(fetchData) && fetchData.length > 0 && (
+          <button className="deploy" onClick={() => setShowDataSet(true)}>
+            Dataset
+          </button>
+        )}
+
         <button className="deploy" onClick={() => fireBaseDeploy()}>
           {isLoading ? (
             <span className="progressBar-container">
@@ -100,7 +62,9 @@ function App() {
           {isLoading ? "Deploying" : "Deploy"} to firebase
         </button>
       </NavBarContainer>
+
       <HomePage setJsonData={setJsonData} jsonData={jsonData} />
+
       {Array.isArray(jsonData) &&
         jsonData.length > 0 &&
         React.Children.toArray(
@@ -112,6 +76,23 @@ function App() {
             />
           ))
         )}
+
+      {Array.isArray(fetchData) && fetchData.length > 0 && (
+        <Dialog
+          open={showDataSet}
+          onClose={() => {
+            setShowDataSet(false);
+          }}
+          maxWidth={"xl"}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DisplayFireBaseData
+            fetchData={fetchData}
+            setShowDataSet={setShowDataSet}
+          />
+        </Dialog>
+      )}
     </MainContainer>
   );
 }
