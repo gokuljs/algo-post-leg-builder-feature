@@ -13,7 +13,7 @@ export const inputList: InputListProps[] = [
   {
     name: "Total lot",
     type: "NUMBER_INPUT",
-    filedName: "Lots",
+    filedName: "lots",
   },
   {
     name: "Position",
