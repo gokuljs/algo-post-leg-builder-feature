@@ -7,6 +7,12 @@ export const TableHeaderContainer = styled(Grid)`
   min-width: 15rem;
   text-transform: capitalize;
   min-height: 30px;
+  :nth-child(even) {
+    background: #a0a3f2;
+  }
+  :nth-child(odd) {
+    background: #d6d7fa;
+  }
 `;
 
 export const ShowFireBaseDataWrapper = styled(Grid)`
