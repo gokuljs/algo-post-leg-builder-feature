@@ -12,6 +12,6 @@ Firebase Demo Link:https://algo-post.web.app/
 
 To run this project <br />
 
-1 git clone this repo <br />
+1 Git clone this repo <br />
 2 npm install <br />
 3 npm start <br />
