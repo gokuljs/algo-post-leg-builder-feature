@@ -19,11 +19,10 @@ function DisplayFireBaseData({
       <Grid
         display="flex"
         className="table-container"
-        justifyContent="center"
+        justifyContent="flex-start"
         alignItems="center"
       >
         <Grid
-          lg={12}
           display="flex"
           item
           justifyContent="center"
@@ -53,10 +52,9 @@ function DisplayFireBaseData({
           fetchData.length > 0 &&
           fetchData.map((item, index) => (
             <Grid
-              lg={12}
               display="flex"
               item
-              justifyContent="center"
+              justifyContent="flex-start"
               flexDirection="column"
               py={3}
             >

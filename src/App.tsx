@@ -9,19 +9,24 @@ import { AlgoPostDataProps } from "./types";
 import Dialog from "@mui/material/Dialog";
 import DisplayFireBaseData from "./pages/HomePage/components/showFireBaseData";
 import StorageIcon from "@mui/icons-material/Storage";
+import CustomizedSnackbars from "./components/snackBar";
 
 function App() {
   const [jsonData, setJsonData] = useState<AlgoPostDataProps[] | []>([]);
   const [fetchData, setFetchData] = useState<AlgoPostDataProps[] | []>([]);
   const [showDataSet, setShowDataSet] = useState<boolean>(false);
+  const [hasDataToUpload, setHasDataToUpload] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const userCollectionRef = collection(db, "algoPost");
   const fireBaseDeploy = async () => {
     if (jsonData.length > 0) {
+      setHasDataToUpload(false);
       setLoading(true);
       await addDoc(userCollectionRef, { jsonData });
       await setLoading(false);
       setJsonData([]);
+    } else {
+      setHasDataToUpload(true);
     }
   };
 
@@ -95,6 +100,10 @@ function App() {
           />
         </Dialog>
       )}
+      <CustomizedSnackbars
+        open={hasDataToUpload}
+        setOpen={setHasDataToUpload}
+      />
     </MainContainer>
   );
 }
