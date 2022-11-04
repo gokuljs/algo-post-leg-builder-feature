@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled, Grid } from "@mui/material";
 import HomePage from "./pages/HomePage";
 import fireBase from "./assests/svg/firebase.svg";
+import { db } from "./firebase-config";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MainContainer = styled("div")`
   width: 100%;
@@ -37,22 +40,64 @@ const NavBarContainer = styled(Grid)`
       background: transparent;
       color: rgba(88, 43, 255, 1);
     }
+    .progressBar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 0.5rem;
+    }
   }
   .fireBase-Image {
     height: 1.5rem;
   }
 `;
+
 function App() {
   const [jsonData, setJsonData] = useState([]);
-  const fireBaseDeploy = () => {
-    const JsonObject = JSON.parse(JSON.stringify(jsonData));
+  const [fetchData, setFetchData] = useState<any[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const userCollectionRef = collection(db, "algoPost");
+  const fireBaseDeploy = async () => {
+    if (jsonData.length > 0) {
+      setLoading(true);
+      await addDoc(userCollectionRef, { jsonData });
+      await setLoading(false);
+      setJsonData([]);
+    }
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getDocs(userCollectionRef);
+      const dataSet = data.docs.map((doc) => doc.data());
+      const modifiedData: any =
+        dataSet.length > 0 && dataSet.map((item: any) => item?.jsonData[0]);
+      if (Array.isArray(modifiedData) && modifiedData.length > 0) {
+        setFetchData([...modifiedData]);
+      }
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(fetchData, "ssss");
+
   return (
     <MainContainer>
       <NavBarContainer container lg={12} item>
         <button className="deploy" onClick={() => fireBaseDeploy()}>
-          <img src={fireBase} className="fireBase-Image" alt="firebAse-logo" />
-          deploy to firebase
+          {isLoading ? (
+            <span className="progressBar-container">
+              <CircularProgress size={15} color="warning" />
+            </span>
+          ) : (
+            <img
+              src={fireBase}
+              className="fireBase-Image"
+              alt="firebAse-logo"
+            />
+          )}
+          {isLoading ? "Deploying" : "Deploy"} to firebase
         </button>
       </NavBarContainer>
       <HomePage setJsonData={setJsonData} jsonData={jsonData} />
